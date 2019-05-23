@@ -527,6 +527,24 @@ describe 'nginx' do
                 notmatch: %r{log_format}
               },
               {
+                title: 'should set stream log formats',
+                attr: 'stream_log_format',
+                value: {
+                  'format1' => 'FORMAT1',
+                  'format2' => 'FORMAT2'
+                },
+                match: [
+                  '  stream_log_format format1 \'FORMAT1\';',
+                  '  stream_log_format format2 \'FORMAT2\';'
+                ]
+              },
+              {
+                title: 'should not set stream log formats',
+                attr: 'stream_log_format',
+                value: {},
+                notmatch: %r{stream_log_format}
+              },
+              {
                 title: 'should set multi_accept',
                 attr: 'multi_accept',
                 value: 'on',
@@ -562,6 +580,21 @@ describe 'nginx' do
                 value: ['/path/to/access.log', 'syslog:server=localhost'],
                 match: [
                   '  access_log /path/to/access.log;',
+                  '  access_log syslog:server=localhost;'
+                ]
+              },
+              {
+                title: 'should set stream access_log',
+                attr: 'stream_access_log',
+                value: '/path/to/stream.access.log',
+                match: '  access_log /path/to/stream.access.log;'
+              },
+              {
+                title: 'should set multiple stream access_logs',
+                attr: 'stream_access_log',
+                value: ['/path/to/stream.access.log', 'syslog:server=localhost'],
+                match: [
+                  '  access_log /path/to/stream.access.log;',
                   '  access_log syslog:server=localhost;'
                 ]
               },
